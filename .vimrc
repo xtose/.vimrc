@@ -18,8 +18,7 @@ Plug 'vim-syntastic/syntastic'
 Plug 'nvie/vim-flake8'
 Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
 Plug 'jmcantrell/vim-virtualenv'
-Plug 'bronson/vim-trailing-whitespace'      " :FixWhitespace
-Plug 'junegunn/vim-easy-align'              " :EasyAlign
+Plug 'junegunn/vim-easy-align'
 Plug 'Valloric/YouCompleteMe'
 
 call plug#end()
