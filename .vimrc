@@ -18,7 +18,7 @@ Plug 'vim-syntastic/syntastic'
 Plug 'nvie/vim-flake8'
 Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
 Plug 'jmcantrell/vim-virtualenv'
-Plug 'junegunn/vim-easy-align'
+Plug 'junegunn/vim-easy-align'              
 Plug 'Valloric/YouCompleteMe'
 
 call plug#end()
@@ -61,7 +61,7 @@ set noswapfile
 
 set showmatch           " Show the matching part of the pair for [] {} and ()
 set ruler               " Text after a double-quote is a comment
-" set cursorline          " Show a visual line under cursors current line
+set cursorline          " Show a visual line under cursors current line
 set wildmenu            " Turn on the Wild menu
 
 " Ignore compiled files
@@ -85,7 +85,10 @@ set guioptions-=l
 set guioptions-=L
 
 set t_Co=256            " Enable 256 colors
-set background=light    " background light
+
+" colorscheme
+set background=dark
+colorscheme default
 
 set laststatus=2        " Always show the status line
 set foldcolumn=1        " Add a bit extra margin to the left
@@ -171,7 +174,7 @@ func! LinterStatus() abort
     let l:all_errors = l:counts.error + l:counts.style_error
     let l:all_non_errors = l:counts.total + l:all_errors
 
-    return l:counts.total == 0 ? '@ all good @' : printf(
+    return l:counts.total == 0 ? 'all good' : printf(
         \   '😞 %dW %dE',
         \   all_non_errors,
         \   all_errors
@@ -179,11 +182,10 @@ func! LinterStatus() abort
 endfunc
 
 
-
 " -> YouCompleteMe
 " -------------------------------------------------------------
 let g:ycm_autoclose_preview_window_after_completion=1
-let g:ycm_python_binary_path = './venv/bin/python3'
+let g:ycm_python_binary_path = 'venv/bin/python3'
 let g:ycm_global_ycm_extra_conf = "~/.vim/.ycm_extra_conf.py"
 
 
@@ -256,7 +258,7 @@ au BufNewFile,BufRead *.js, *.html, *.css
 autocmd FileType css set omnifunc=csscomplete#CompleteCSS
 
 " * Shell section
-set term=screen-256color
+set term=xterm-256color
 
 " * Twig section
 autocmd BufRead *.twig set syntax=html filetype=html
