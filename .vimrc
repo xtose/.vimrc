@@ -11,6 +11,7 @@
 " -> VIM-PLUG
 call plug#begin('~/.vim/plugged')
 
+Plug 'preservim/nerdtree'
 Plug 'plasticboy/vim-markdown'
 Plug 'sheerun/vim-polyglot'
 Plug 'dense-analysis/ale'
@@ -120,6 +121,7 @@ inoremap <Down> <nop>
 inoremap <Left> <nop>
 inoremap <Right> <nop>
 
+nnoremap <C-t> :NERDTreeToggle<CR>
 
 " Managing tabs
 map <leader>t :tabnew<CR>
@@ -129,7 +131,7 @@ map <leader>tc :tabclose<CR>
 map <leader>tf :tabfirst<CR>
 map <leader>tl :tablast<CR>
 
-map <F2> :tabnew<CR>:Explore .<CR>
+map <F2> :tabnew<CR>
 
 nmap <F8> :ALEFix<CR>
 
