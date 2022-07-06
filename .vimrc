@@ -1,10 +1,8 @@
-" -------------------------------------------------------------
+
 " Maintainer:
-"       Nick Novozhenin
-"
-" Contacts:
-"       Telegram:
-"           t.me/tose_x
+"       Nick Novo
+" Contacts: Telegram:
+"           t.me/xtose
 "
 " -------------------------------------------------------------
 
@@ -19,8 +17,10 @@ Plug 'vim-syntastic/syntastic'
 Plug 'nvie/vim-flake8'
 Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
 Plug 'jmcantrell/vim-virtualenv'
-Plug 'junegunn/vim-easy-align'              
+Plug 'junegunn/vim-easy-align'
 Plug 'Valloric/YouCompleteMe'
+Plug 'heavenshell/vim-pydocstring', { 'do': 'make install', 'for': 'python' }
+Plug 'mattn/emmet-vim'
 
 call plug#end()
 
@@ -39,7 +39,7 @@ filetype indent on
 " Set to auto read when a file is changed from the outside
 set autoread
 au FocusGained,BufEnter * checktime
-
+ 
 syntax enable           " Highlight syntax
 set ai                  " Auto indent
 set si                  " Smart indent
@@ -69,6 +69,7 @@ set wildmenu            " Turn on the Wild menu
 set wildignore=*.o,*~,*.pyc,*/,git/*,*/.hg/*,*/.svn/*,*/.DS_Store
 
 set tabstop=4           " Set tabs to have 4 spaces
+set softtabstop=4
 set shiftwidth=4        " When using the >> or <<, shift lines by 4 spaces
 set expandtab           " Expand tabs into spaces
 set smarttab            " Be smart when using tabs
@@ -82,7 +83,7 @@ set tm=500
 " Disable scrollbars
 set guioptions-=r
 set guioptions-=R
-set guioptions-=l
+set guioptions-=R
 set guioptions-=L
 
 set t_Co=256            " Enable 256 colors
@@ -90,6 +91,8 @@ set t_Co=256            " Enable 256 colors
 " colorscheme
 set background=dark
 colorscheme default
+
+hi pythonComment cterm=italic
 
 set laststatus=2        " Always show the status line
 set foldcolumn=1        " Add a bit extra margin to the left
@@ -121,7 +124,7 @@ inoremap <Down> <nop>
 inoremap <Left> <nop>
 inoremap <Right> <nop>
 
-nnoremap <C-t> :NERDTreeToggle<CR>
+nnoremap <C-t> :NERDTreeToggle<CR>:NERDTreeRefreshRoot<CR>
 
 " Managing tabs
 map <leader>t :tabnew<CR>
@@ -131,9 +134,11 @@ map <leader>tc :tabclose<CR>
 map <leader>tf :tabfirst<CR>
 map <leader>tl :tablast<CR>
 
-map <F2> :tabnew<CR>
+map <F2> :tabnew<CR>:NERDTree<CR>:NERDTreeRefreshRoot<CR>
+map <C-w><C-w> :wincmd w<CR>:NERDTreeRefreshRoot<CR>
 
 nmap <F8> :ALEFix<CR>
+nmap <silent> <C-_> <Plug>(pydocstring)
 
 map <F10> :call CompileRun()<CR>
 imap <F10> :call CompileRun()<CR>
@@ -155,7 +160,9 @@ iab xmail <C-r>='example@example.com'<CR>
 func! CompileRun()
 exec "w"
 if &filetype == 'python'
-    !time;python3 %
+    !python 'main.py'
+elseif &filetype == 'cpp'
+    !make %
 endif
 endfunc
 
@@ -190,6 +197,14 @@ let g:ycm_autoclose_preview_window_after_completion=1
 let g:ycm_python_binary_path = 'venv/bin/python3'
 let g:ycm_global_ycm_extra_conf = "~/.vim/.ycm_extra_conf.py"
 
+" -> Vim-PyDocstring
+" -------------------------------------------------------------
+let g:pydocstring_doq_path = "~/.local/bin/doq"
+let g:pydocstring_formatter = 'numpy'
+
+" -> Emmet
+" -------------------------------------------------------------
+let g:user_emmet_install_global = 0
 
 " -> VirtualEnv
 " -------------------------------------------------------------
@@ -199,8 +214,8 @@ let g:virtualenv_directory='.'
 " -> Python-mode
 " -------------------------------------------------------------
 let g:pymode_lint = 1
-let g:pymode_lint_checker = "pyflakes,pep8"
-let g:pymode_lint_ignore="E501,W601,C0110,E211,E303,E251"
+let g:pymode_lint_checker = "pyflakes,pep8" let g:pymode_lint_ignore="E501,W601,C0110,E211,E303,E251"
+
 
 " -> Ale
 " -------------------------------------------------------------
@@ -217,8 +232,7 @@ let g:ale_fixers = {
     \}
 
 
-
-" -y Languages supports
+" -> Languages supports
 " -------------------------------------------------------------
 " * Python section
 let python_highlight_all = 1    " Enable all Python syntax highlighting features
@@ -238,7 +252,6 @@ if 'VIRTUAL_ENV' in os.environ:
 EOF
 
 
-
 " * JavaScript section
 au FileType javascript call JavaScriptFold()
 au FileType javascript setl fen
@@ -255,9 +268,11 @@ au BufNewFile,BufRead *.js, *.html, *.css
             \ set softtabstop=2
             \ set shiftwidth=2
 
+" * HTML section
+au FileType html EmmetInstall
 
 " * CSS section
-autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+au FileType css set omnifunc=csscomplete#CompleteCSS
 
 " * Shell section
 set term=xterm-256color
