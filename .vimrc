@@ -1,4 +1,3 @@
-
 " Maintainer:
 "       Nick Novo
 " Contacts: Telegram:
@@ -6,114 +5,151 @@
 "
 " -------------------------------------------------------------
 
-" -> VIM-PLUG
-call plug#begin('~/.vim/plugged')
+set nocompatible
+filetype off
 
-Plug 'preservim/nerdtree'
-Plug 'plasticboy/vim-markdown'
-Plug 'sheerun/vim-polyglot'
-Plug 'dense-analysis/ale'
+" vim-plug
+call plug#begin('~/.local/share/nvim/plugged')
+
+Plug 'scrooloose/nerdtree'
+Plug 'tpope/vim-surround'
+
+" theme
+Plug 'sonph/onehalf', { 'rtp': 'vim' }
+
+" python
+Plug 'klen/python-mode'
+Plug 'jmcantrell/vim-virtualenv'
+Plug 'jupyter-vim/jupyter-vim'
+
+" autocomplete
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" syntax
 Plug 'vim-syntastic/syntastic'
 Plug 'nvie/vim-flake8'
-Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
-Plug 'jmcantrell/vim-virtualenv'
-Plug 'junegunn/vim-easy-align'
-Plug 'Valloric/YouCompleteMe'
-Plug 'heavenshell/vim-pydocstring', { 'do': 'make install', 'for': 'python' }
-Plug 'mattn/emmet-vim'
 
 call plug#end()
 
+filetype on
+filetype plugin on
+filetype plugin indent on
 
-" -> General
-" -------------------------------------------------------------
-language messages en_US.UTF-8   " Set vim en
-set langmenu=en_US.UTF-8        " Set langmenu en
+" general ------
+language messages en_US.UTF-8   " set vim en
+set langmenu=en_US.UTF-8        " set langmenu en
 
 set encoding=utf-8
 
-" Enable filetype plugins
+" enable filetype plugins
 filetype plugin on
 filetype indent on
 
-" Set to auto read when a file is changed from the outside
+set hidden
+
+" set to auto read when a file is changed from the outside
 set autoread
 au FocusGained,BufEnter * checktime
  
-syntax enable           " Highlight syntax
-set ai                  " Auto indent
-set si                  " Smart indent
-set wrap                " Wrap lines
+let python_highlight_all=1
+syntax on               " highlight syntax
 
-set foldmethod=indent   " Enable folding
+set ai                  " auto indent
+set si                  " smart indent
+set wrap                " wrap lines
+
+set foldmethod=indent   " enable folding
 set foldlevel=99
 
-set hlsearch            " Highlight search
-set ignorecase          " Do case insensitive search
-set incsearch           " Show incremental search results as you type
-set smartcase           " When searching try to be smart about cases
+set hlsearch            " highlight search
+set ignorecase          " do case insensitive search
+set incsearch           " show incremental search results as you type
+set smartcase           " when searching try to be smart about cases
 
-set nu                  " Display line number
+set nu                  " display line number
 
-" Turn backup off
+set termguicolors
+
+set t_Co=256
+
+colorscheme onehalfdark
+set background=dark
+
+" turn backup off
 set nobackup
 set nowb
 set noswapfile
 
-set showmatch           " Show the matching part of the pair for [] {} and ()
-set ruler               " Text after a double-quote is a comment
-set cursorline          " Show a visual line under cursors current line
-set wildmenu            " Turn on the Wild menu
+set showmatch           " show the matching part of the pair for [] {} and ()
+set ruler               " text after a double-quote is a comment
+set cursorline          " show a visual line under cursors current line
+set wildmenu            " turn on the Wild menu
 
-" Ignore compiled files
+" ignore compiled files
 set wildignore=*.o,*~,*.pyc,*/,git/*,*/.hg/*,*/.svn/*,*/.DS_Store
 
-set tabstop=4           " Set tabs to have 4 spaces
+set tabstop=4           " set tabs to have 4 spaces
 set softtabstop=4
-set shiftwidth=4        " When using the >> or <<, shift lines by 4 spaces
-set expandtab           " Expand tabs into spaces
-set smarttab            " Be smart when using tabs
+set shiftwidth=4        " when using the >> or <<, shift lines by 4 spaces
+set expandtab           " expand tabs into spaces
+set smarttab            " be smart when using tabs
 
-" Turn off sound on errors
+" turn off sound on errors
 set noerrorbells
 set novisualbell
 set t_vb=
 set tm=500
 
-" Disable scrollbars
+" disable scrollbars
 set guioptions-=r
 set guioptions-=R
 set guioptions-=R
 set guioptions-=L
 
-set t_Co=256            " Enable 256 colors
 
-" colorscheme
-set background=dark
-colorscheme default
+" plugin settings ------
+" NERDTree
+autocmd vimenter * NERDTree
+autocmd vimenter * if !argc() | NERDTree | endif
+let NERDTreeIgnore=['\~$', '\.pyc$', '\.pyo$', '\.class$', 'pip-log\.txt$', '\.o$']
 
-hi pythonComment cterm=italic
+" Python-mode 
+let g:pymode_rope = 0
+let g:pymode_rope_completion = 0
+let g:pymode_rope_complete_on_dot = 0
 
-set laststatus=2        " Always show the status line
-set foldcolumn=1        " Add a bit extra margin to the left
+let g:pymode_doc = 0
+" let g:pymode_doc_key = 'K'
 
-set statusline=
-set statusline+=%m
-set statusline+=\ %f
-set statusline+=%=
-set statusline+=\ %{LinterStatus()}
+let g:pymode_lint = 1
+let g:pymode_lint_checker = 'pyflakes,pep8'
+let g:pymode_lint_ignore="E501,W601,C0110"
+let g:pymode_lint_write = 1
+
+let g:pymode_virtualenv = 1
+
+let g:pymode_breakpoint = 1
+let g:pymode_breakpoint_key = '<leader>b'
+
+let g:pymode_syntax = 1
+let g:pymode_syntax_all = 1
+let g:pymode_syntax_indent_errors = g:pymode_syntax_all
+let g:pymode_syntax_space_errors = g:pymode_syntax_all
+
+let g:pymode_folding = 0
+
+let g:pymode_run = 0
+
+" virtualenv
+let g:virtualenv_directory='.'
 
 
-" -> Mapping
-" -------------------------------------------------------------
-inoremap jj <ESC>       " Remap escape to `jj`
+" hotkeys ------
+inoremap jj <ESC>
 
-" Disable Highlight
 map <silent> <leader><leader> :noh<CR>
 
-map <leader>K :YcmCompleter GoToDefinitionElseDeclaration<CR>
-
-" Disabling arrows navigations
+" disabling arrows navigations
 nnoremap <Up> <nop>
 nnoremap <Down> <nop>
 nnoremap <Left> <nop>
@@ -124,163 +160,68 @@ inoremap <Down> <nop>
 inoremap <Left> <nop>
 inoremap <Right> <nop>
 
-nnoremap <C-t> :NERDTreeToggle<CR>:NERDTreeRefreshRoot<CR>
+nnoremap <F2> :NERDTreeRefreshRoot<CR>
+nnoremap <F9> :w<CR>:!clear;black %<CR>
+nnoremap <F10> ::w!<CR>:!clear;python %<CR>
+nnoremap <leader>jc :call jupyter#Connect()<CR>
+map <C-w><C-w> :wincmd w<CR>:NERDTreeRefreshRoot<CR>
 
-" Managing tabs
-map <leader>t :tabnew<CR>
+" managing tabs
+map <leader>t :tabnew<CR>:NERDTree<CR>:wincmd w<CR>
 map <leader>tn :tabnext<CR>
 map <leader>tp :tabprevious<CR>
 map <leader>tc :tabclose<CR>
 map <leader>tf :tabfirst<CR>
 map <leader>tl :tablast<CR>
 
-map <F2> :tabnew<CR>:NERDTree<CR>:NERDTreeRefreshRoot<CR>
-map <C-w><C-w> :wincmd w<CR>:NERDTreeRefreshRoot<CR>
-
-nmap <F8> :ALEFix<CR>
-nmap <silent> <C-_> <Plug>(pydocstring)
-
-map <F10> :call CompileRun()<CR>
-imap <F10> :call CompileRun()<CR>
-vmap <F10> :call CompileRun()<CR>
-
-vnoremap <silent> <Enter> :EasyAlign<CR>
+nmap <silent> gd <Plug>(coc-definition)
 
 
-" -> Abr
-" -------------------------------------------------------------
-iab xdate <C-r>=strftime("%d/%m/%y %H:%M:%S")<CR>
-iab xtell <C-r>='+7 (987) 654-32-10'<CR>
-iab xmail <C-r>='example@example.com'<CR>
+" functions ------
+" show docs
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
 
 
-" -> Functions
-" -------------------------------------------------------------
-" Compilers for different systems may differ
-func! CompileRun()
-exec "w"
-if &filetype == 'python'
-    !python 'main.py'
-elseif &filetype == 'cpp'
-    !make %
-endif
-endfunc
-
-func! JavaScriptFold()
-    setl foldmethod=syntax
-    setl foldlevelstart=1
-    syn region foldBraces start=/{/ end=/}/ transparent fold keeepend extend
-
-    func! FoldText()
-        return substitute(getline(v:foldstart), '{.*', '{...}', '')
-    endfunc
-    setl foldtext=FoldText()
-endfunc
-
-func! LinterStatus() abort
-    let l:counts = ale#statusline#Count(bufnr(''))
-
-    let l:all_errors = l:counts.error + l:counts.style_error
-    let l:all_non_errors = l:counts.total + l:all_errors
-
-    return l:counts.total == 0 ? 'all good' : printf(
-        \   '😞 %dW %dE',
-        \   all_non_errors,
-        \   all_errors
-        \)
-endfunc
-
-
-" -> YouCompleteMe
-" -------------------------------------------------------------
-let g:ycm_autoclose_preview_window_after_completion=1
-let g:ycm_python_binary_path = 'venv/bin/python3'
-let g:ycm_global_ycm_extra_conf = "~/.vim/.ycm_extra_conf.py"
-
-" -> Vim-PyDocstring
-" -------------------------------------------------------------
-let g:pydocstring_doq_path = "~/.local/bin/doq"
-let g:pydocstring_formatter = 'numpy'
-
-" -> Emmet
-" -------------------------------------------------------------
-let g:user_emmet_install_global = 0
-
-" -> VirtualEnv
-" -------------------------------------------------------------
-let g:virtualenv_directory='.'
-
-
-" -> Python-mode
-" -------------------------------------------------------------
-let g:pymode_lint = 1
-let g:pymode_lint_checker = "pyflakes,pep8" let g:pymode_lint_ignore="E501,W601,C0110,E211,E303,E251"
-
-
-" -> Ale
-" -------------------------------------------------------------
-let g:ale_fix_on_save = 1
-
-let g:ale_linters = {
-    \   'python': ['flake8', 'pylint'],
-    \   'ruby': ['standardrb', 'ruboco'],
-    \   'javascript': ['eslint'],
-    \}
-
-let g:ale_fixers = {
-    \   'python': ['yapf'],
-    \}
-
-
-" -> Languages supports
-" -------------------------------------------------------------
-" * Python section
-let python_highlight_all = 1    " Enable all Python syntax highlighting features
-au FileType python syn keyword pythonDecorator True None False self
-au BufNewFile,BufRead *.jinja set syntax=htmljinja
-au BufNewFile,BufRead *.mako set ft=mako
-au BufNewFile,BufRead *.py set textwidth=80
-au BufNewFile *.py 0r ~/.vim/skeleton.py
-
+" python with virtualenv support
 py3 << EOF
 import os
 import sys
 if 'VIRTUAL_ENV' in os.environ:
-    project_base_dir = os.environ['VIRTUAL_ENV']
-    activate_this = os.path.join(project_base_dir, 'bin/activate')
-    exec(open(activate_this).read(), dict(__file__=activate_this))
+  project_base_dir = os.environ['VIRTUAL_ENV']
+  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
+  #execfile(activate_this, dict(__file__=activate_this)) # устарел execfile
+  exec(open(activate_this).read(), dict(__file__=activate_this))
 EOF
 
 
-" * JavaScript section
-au FileType javascript call JavaScriptFold()
-au FileType javascript setl fen
-au FileType javascript setl nocindnt
+" highlight settings
+hi BadWhitespace ctermbg=red guibg=red
+" comments
+hi pythonComment cterm=italic ctermfg=grey
+hi pythonDocstring cterm=italic ctermfg=grey
+hi Comment cterm=italic ctermfg=grey
+hi CommentURL cterm=italic ctermfg=grey
 
-au FileType javascript,typescript imap <C-t> console.log();<ESC>hi
-au FileType javascript,typescript imap <C-a> alert();<ESC>hi
 
-au FileType javascript,typescript inoremap <buffer> $r return
-au FileType javascript,typescript inoremap <buffer> $f // --- PH<Esc>FP2xi
+" indentation ------
+" python
+au BufRead,BufNewFile *.py,*pyw set tabstop=4
+au BufRead,BufNewFile *.py,*pyw set softtabstop=4
+au BufRead,BufNewFile *.py,*pyw set autoindent
+au BufRead,BufNewFile *.py,*pyw set shiftwidth=4
+au BufRead,BufNewFile *.py,*.pyw set expandtab
+au BufRead,BufNewFile *.py,*.pyw,*.c,*.h set textwidth=79
+au BufNewFile *.py,*.pyw,*.c,*.h set fileformat=unix
+au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 
-au BufNewFile,BufRead *.js, *.html, *.css
-            \ set tabstop=2
-            \ set softtabstop=2
-            \ set shiftwidth=2
 
-" * HTML section
-au FileType html EmmetInstall
-
-" * CSS section
-au FileType css set omnifunc=csscomplete#CompleteCSS
-
-" * Shell section
-set term=xterm-256color
-
-" * Twig section
-autocmd BufRead *.twig set syntax=html filetype=html
-
-" * Markdown section
-let vim_markdown_folding_disabled = 1
-au! BufRead,BufNewFile *.markdown set filetype=mkd
-au! BufRead,BufNewFile *.md set filetype=mkd
+" for full stack development
+au BufNewFile,BufRead *.js, *.html, *.css set tabstop=2
+au BufNewFile,BufRead *.js, *.html, *.css set shiftwidth=2
+au BufNewFile,BufRead *.js, *.html, *.css set softtabstop=2
