@@ -9,7 +9,7 @@ set nocompatible
 filetype off
 
 " vim-plug
-call plug#begin('~/.local/share/nvim/plugged')
+call plug#begin('~/.vim/plugged')
 
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-surround'
@@ -36,22 +36,35 @@ filetype plugin on
 filetype plugin indent on
 
 " general ------
-language messages en_US.UTF-8   " set vim en
-set langmenu=en_US.UTF-8        " set langmenu en
+language messages en_US         " set vim en
+set langmenu=en_US              " set langmenu en
+let $LANG="en_US"
 
 set encoding=utf-8
+
+set guifont=Input:h16
 
 " enable filetype plugins
 filetype plugin on
 filetype indent on
 
+" textEdit might fail if hidden is not set
 set hidden
+
+" give more space for displaying messages
+set cmdheight=2
+
+" having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
+" delays and poor user experience
+set updatetime=300
 
 " set to auto read when a file is changed from the outside
 set autoread
 au FocusGained,BufEnter * checktime
+
+" make wildmenu behave like similar to Bash completion.
+set wildmode=list:longest
  
-let python_highlight_all=1
 syntax on               " highlight syntax
 
 set ai                  " auto indent
@@ -109,9 +122,10 @@ set guioptions-=L
 
 " plugin settings ------
 " NERDTree
-autocmd vimenter * NERDTree
-autocmd vimenter * if !argc() | NERDTree | endif
+autocmd vimenter * NERDTreeToggle
+" autocmd vimenter * if !argc() | NERDTree | endif
 let NERDTreeIgnore=['\~$', '\.pyc$', '\.pyo$', '\.class$', 'pip-log\.txt$', '\.o$']
+
 
 " Python-mode 
 let g:pymode_rope = 0
@@ -120,6 +134,8 @@ let g:pymode_rope_complete_on_dot = 0
 
 let g:pymode_doc = 0
 " let g:pymode_doc_key = 'K'
+
+let g:pymode_indent = 0
 
 let g:pymode_lint = 1
 let g:pymode_lint_checker = 'pyflakes,pep8'
@@ -176,7 +192,7 @@ map <leader>tl :tablast<CR>
 
 nmap <silent> gd <Plug>(coc-definition)
 
-
+"
 " functions ------
 " show docs
 function! s:show_documentation()
